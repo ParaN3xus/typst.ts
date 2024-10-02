@@ -44,8 +44,8 @@ impl FullTextDigest {
         match item {
             Group(g) => Self::export_frame(f, &g.frame),
             Text(t) => f.write_str(t.text.as_str()),
-            #[cfg(not(feature = "no-content-hint"))]
-            ContentHint(c) => f.write_char(*c),
+            // #[cfg(not(feature = "no-content-hint"))]
+            // ContentHint(c) => f.write_char(*c),
             Link(..) | Tag(..) | Shape(..) | Image(..) => Ok(()),
         }
     }
