@@ -4494,8 +4494,8 @@ checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
 
 [[package]]
 name = "typst"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "arrayvec",
  "az",
@@ -4572,8 +4572,8 @@ source = "git+https://github.com/typst/typst-dev-assets?rev=e9f8127#e9f81271547c
 
 [[package]]
 name = "typst-ide"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "comemo",
  "ecow",
@@ -4586,8 +4586,8 @@ dependencies = [
 
 [[package]]
 name = "typst-macros"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -4597,8 +4597,8 @@ dependencies = [
 
 [[package]]
 name = "typst-pdf"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "arrayvec",
  "base64 0.22.1",
@@ -4623,8 +4623,8 @@ dependencies = [
 
 [[package]]
 name = "typst-svg"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "base64 0.22.1",
  "comemo",
@@ -4640,8 +4640,8 @@ dependencies = [
 
 [[package]]
 name = "typst-syntax"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "ecow",
  "once_cell",
@@ -4657,8 +4657,8 @@ dependencies = [
 
 [[package]]
 name = "typst-timing"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "parking_lot",
  "serde",
@@ -4911,8 +4911,8 @@ dependencies = [
 
 [[package]]
 name = "typst-utils"
-version = "0.11.0"
-source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=tinymist-v0.11.29#d17aa2b8c8299458c2d0419eab46dde9a46b6b91"
+version = "0.11.1"
+source = "git+https://github.com/Myriad-Dreamin/typst.git?branch=typst.ts-v0.12.0-rc1-content-hint#403a2d034273cfd28fee75def068e07c2339abda"
 dependencies = [
  "once_cell",
  "portable-atomic",
