@@ -73,11 +73,11 @@ strip = true
 [workspace.dependencies]
 
 # typesetting
-typst = "0.11.1"
-typst-ide = "0.11.1"
-typst-pdf = "0.11.1"
-typst-svg = "0.11.1"
-typst-syntax = "0.11.1"
+typst = "0.12.0-rc2"
+typst-ide = "0.12.0-rc2"
+typst-pdf = "0.12.0-rc2"
+typst-svg = "0.12.0-rc2"
+typst-syntax = "0.12.0-rc2"
 ttf-parser = "0.24.1"
 
 typst-assets = { git = "https://github.com/typst/typst-assets", rev = "4afd428" }
@@ -227,11 +227,11 @@ undocumented_unsafe_blocks = "warn"
 # typst-pdf = { git = "https://github.com/Myriad-Dreamin/typst.git", branch = "typst-ts-v0.10.0" }
 
 # comemo = { git = "https://github.com/Dherse/comemo", rev = "15c8d5b" }
-typst = { git = "https://github.com/ParaN3xus/typst", branch = "typst.ts-tinymist-v0.11.31-content-hint" }
-typst-syntax = { git = "https://github.com/ParaN3xus/typst", branch = "typst.ts-tinymist-v0.11.31-content-hint" }
-typst-ide = { git = "https://github.com/ParaN3xus/typst", branch = "typst.ts-tinymist-v0.11.31-content-hint" }
-typst-svg = { git = "https://github.com/ParaN3xus/typst", branch = "typst.ts-tinymist-v0.11.31-content-hint" }
-typst-pdf = { git = "https://github.com/ParaN3xus/typst", branch = "typst.ts-tinymist-v0.11.31-content-hint" }
+typst = { git = "https://github.com/ParaN3xus/typst", tag = "typst.ts-typst-0.12.0-rc2-content-hint" }
+typst-syntax = { git = "https://github.com/ParaN3xus/typst", tag = "typst.ts-typst-0.12.0-rc2-content-hint" }
+typst-ide = { git = "https://github.com/ParaN3xus/typst", tag = "typst.ts-typst-0.12.0-rc2-content-hint" }
+typst-svg = { git = "https://github.com/ParaN3xus/typst", tag = "typst.ts-typst-0.12.0-rc2-content-hint" }
+typst-pdf = { git = "https://github.com/ParaN3xus/typst", tag = "typst.ts-typst-0.12.0-rc2-content-hint" }
 
 # comemo = { path = "../comemo" }
 # typst = { path = "../typst/crates/typst" }
