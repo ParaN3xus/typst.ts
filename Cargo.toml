@@ -198,7 +198,9 @@ reflexo = { version = "0.5.4", path = "crates/reflexo", default-features = false
 reflexo-vfs = { version = "0.5.4", path = "crates/reflexo-vfs" }
 reflexo-world = { version = "0.5.4", path = "crates/reflexo-world" }
 reflexo-typst = { version = "0.5.4", path = "crates/reflexo-typst", default-features = false }
-reflexo-typst-shim = { version = "0.5.4", path = "crates/reflexo-typst-shim" }
+reflexo-typst-shim = { version = "0.5.4", path = "crates/reflexo-typst-shim" features = [
+    "nightly",
+]}
 
 # conversions
 reflexo-typst2vec = { version = "0.5.4", path = "crates/conversion/typst2vec" }
@@ -231,11 +233,11 @@ undocumented_unsafe_blocks = "warn"
 # typst-pdf = { git = "https://github.com/Myriad-Dreamin/typst.git", branch = "typst-ts-v0.10.0" }
 
 # comemo = { git = "https://github.com/Dherse/comemo", rev = "15c8d5b" }
-typst = { git = "https://github.com/Myriad-Dreamin/typst", tag = "typst.ts/v0.5.0-rc9" }
-typst-syntax = { git = "https://github.com/Myriad-Dreamin/typst", tag = "typst.ts/v0.5.0-rc9" }
-typst-ide = { git = "https://github.com/Myriad-Dreamin/typst", tag = "typst.ts/v0.5.0-rc9" }
-typst-svg = { git = "https://github.com/Myriad-Dreamin/typst", tag = "typst.ts/v0.5.0-rc9" }
-typst-pdf = { git = "https://github.com/Myriad-Dreamin/typst", tag = "typst.ts/v0.5.0-rc9" }
+typst = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
+typst-syntax = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
+typst-ide = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
+typst-svg = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
+typst-pdf = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
 
 # comemo = { path = "../comemo" }
 # typst = { path = "../typst/crates/typst" }
