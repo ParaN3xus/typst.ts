@@ -78,6 +78,7 @@ typst-ide = "0.12.0"
 typst-pdf = "0.12.0"
 typst-svg = "0.12.0"
 typst-syntax = "0.12.0"
+typst-eval = "0.12.0"
 ttf-parser = "0.24.1"
 
 typst-assets = "0.12.0"
@@ -198,7 +199,7 @@ reflexo = { version = "0.5.4", path = "crates/reflexo", default-features = false
 reflexo-vfs = { version = "0.5.4", path = "crates/reflexo-vfs" }
 reflexo-world = { version = "0.5.4", path = "crates/reflexo-world" }
 reflexo-typst = { version = "0.5.4", path = "crates/reflexo-typst", default-features = false }
-reflexo-typst-shim = { version = "0.5.4", path = "crates/reflexo-typst-shim" features = [
+reflexo-typst-shim = { version = "0.5.4", path = "crates/reflexo-typst-shim", features = [
     "nightly",
 ]}
 
@@ -235,6 +236,7 @@ undocumented_unsafe_blocks = "warn"
 # comemo = { git = "https://github.com/Dherse/comemo", rev = "15c8d5b" }
 typst = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
 typst-syntax = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
+typst-eval = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
 typst-ide = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
 typst-svg = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }
 typst-pdf = { git = "https://github.com/ParaN3xus/typst", branch = "tinymist-typst-mainline-content-hint" }

@@ -1,17 +1,18 @@
 use comemo::Track;
 use typst::{
     diag::{EcoString, StrResult},
-    eval::{eval_string, EvalMode},
     foundations::{Content, LocatableSelector, Scope},
     model::Document,
     syntax::Span,
     World,
 };
+use typst_eval::{eval_string, EvalMode};
 
 // todo: query exporter
 /// Retrieve the matches for the selector.
 pub fn retrieve(world: &dyn World, selector: &str, document: &Document) -> StrResult<Vec<Content>> {
     let selector = eval_string(
+        &typst::ROUTINES,
         world.track(),
         selector,
         Span::detached(),
