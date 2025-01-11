@@ -368,7 +368,7 @@ impl FontLoader for WebFontLoader {
         );
         // let blob = pollster::block_on(JsFuture::from(blob.array_buffer())).unwrap();
         let blob = font.load()?;
-        let blob = Bytes::from(js_sys::Uint8Array::new(&blob).to_vec());
+        let blob = Bytes::new(js_sys::Uint8Array::new(&blob).to_vec());
 
         Font::new(blob, self.index)
     }

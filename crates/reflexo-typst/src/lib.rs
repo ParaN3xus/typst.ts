@@ -243,7 +243,7 @@ impl fmt::Display for CompileReportMsg<'_> {
     }
 }
 
-type CompileRawResult = Deferred<(SourceResult<Warned<Arc<TypstDocument>>>, CompileEnv)>;
+type CompileRawResult = Deferred<(SourceResult<Warned<Arc<TypstPagedDocument>>>, CompileEnv)>;
 type DocState = std::sync::OnceLock<CompileRawResult>;
 
 /// A signal that possibly triggers an export.
@@ -270,7 +270,7 @@ pub struct CompileSnapshot<F: CompilerFeat> {
     /// Compiling the document.
     doc_state: Arc<DocState>,
     /// The last successfully compiled document.
-    pub success_doc: Option<Arc<TypstDocument>>,
+    pub success_doc: Option<Arc<TypstPagedDocument>>,
 }
 
 impl<F: CompilerFeat + 'static> CompileSnapshot<F> {
@@ -348,9 +348,9 @@ pub struct CompiledArtifact<F: CompilerFeat> {
     /// The diagnostics of the document.
     pub warnings: EcoVec<SourceDiagnostic>,
     /// The compiled document.
-    pub doc: SourceResult<Arc<TypstDocument>>,
+    pub doc: SourceResult<Arc<TypstPagedDocument>>,
     /// The last successfully compiled document.
-    success_doc: Option<Arc<TypstDocument>>,
+    success_doc: Option<Arc<TypstPagedDocument>>,
 }
 
 impl<F: CompilerFeat> Clone for CompiledArtifact<F> {
@@ -367,7 +367,7 @@ impl<F: CompilerFeat> Clone for CompiledArtifact<F> {
 }
 
 impl<F: CompilerFeat> CompiledArtifact<F> {
-    pub fn success_doc(&self) -> Option<Arc<TypstDocument>> {
+    pub fn success_doc(&self) -> Option<Arc<TypstPagedDocument>> {
         self.doc
             .as_ref()
             .ok()
@@ -434,7 +434,7 @@ pub trait Compiler {
         &mut self,
         world: &Self::W,
         env: &mut CompileEnv,
-    ) -> SourceResult<Warned<Arc<TypstDocument>>> {
+    ) -> SourceResult<Warned<Arc<TypstPagedDocument>>> {
         self.pure_compile_(world, env)
     }
 
@@ -443,7 +443,7 @@ pub trait Compiler {
         &mut self,
         world: &Self::W,
         selector: String,
-        document: &TypstDocument,
+        document: &TypstPagedDocument,
     ) -> SourceResult<Vec<Content>> {
         self::query::retrieve(world, &selector, document).at(Span::detached())
     }
@@ -453,7 +453,7 @@ pub trait Compiler {
         &mut self,
         world: &Self::W,
         env: &mut CompileEnv,
-    ) -> SourceResult<Warned<Arc<TypstDocument>>> {
+    ) -> SourceResult<Warned<Arc<TypstPagedDocument>>> {
         self.pure_compile(world, env)
     }
 
@@ -471,7 +471,7 @@ pub trait Compiler {
         &mut self,
         world: &Self::W,
         selector: String,
-        document: &TypstDocument,
+        document: &TypstPagedDocument,
     ) -> SourceResult<Vec<Content>> {
         self.pure_query(world, selector, document)
     }
@@ -504,7 +504,7 @@ pub trait CompileMiddleware {
         &mut self,
         world: &<<Self as CompileMiddleware>::Compiler as Compiler>::W,
         env: &mut CompileEnv,
-    ) -> SourceResult<Warned<Arc<TypstDocument>>> {
+    ) -> SourceResult<Warned<Arc<TypstPagedDocument>>> {
         self.inner_mut().compile(world, env)
     }
 
@@ -514,7 +514,7 @@ pub trait CompileMiddleware {
         &mut self,
         world: &<<Self as CompileMiddleware>::Compiler as Compiler>::W,
         selector: String,
-        document: &TypstDocument,
+        document: &TypstPagedDocument,
     ) -> SourceResult<Vec<Content>> {
         self.inner_mut().query(world, selector, document)
     }
@@ -536,7 +536,7 @@ impl<T: CompileMiddleware> Compiler for T {
         &mut self,
         world: &Self::W,
         env: &mut CompileEnv,
-    ) -> SourceResult<Warned<Arc<TypstDocument>>> {
+    ) -> SourceResult<Warned<Arc<TypstPagedDocument>>> {
         self.inner_mut().pure_compile(world, env)
     }
 
@@ -545,7 +545,7 @@ impl<T: CompileMiddleware> Compiler for T {
         &mut self,
         world: &Self::W,
         selector: String,
-        document: &TypstDocument,
+        document: &TypstPagedDocument,
     ) -> SourceResult<Vec<Content>> {
         self.inner_mut().pure_query(world, selector, document)
     }
@@ -555,7 +555,7 @@ impl<T: CompileMiddleware> Compiler for T {
         &mut self,
         world: &Self::W,
         env: &mut CompileEnv,
-    ) -> SourceResult<Warned<Arc<TypstDocument>>> {
+    ) -> SourceResult<Warned<Arc<TypstPagedDocument>>> {
         self.wrap_compile(world, env)
     }
 
@@ -564,7 +564,7 @@ impl<T: CompileMiddleware> Compiler for T {
         &mut self,
         world: &Self::W,
         selector: String,
-        document: &TypstDocument,
+        document: &TypstPagedDocument,
     ) -> SourceResult<Vec<Content>> {
         self.wrap_query(world, selector, document)
     }

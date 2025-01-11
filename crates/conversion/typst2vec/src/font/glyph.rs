@@ -3,6 +3,7 @@ use std::hash::{Hash, Hasher};
 use std::{ops::Deref, sync::Arc};
 
 pub use ttf_parser::GlyphId;
+use typst::foundations::Bytes;
 use typst::text::Font;
 // use typst::geom::Axes;
 use typst::visualize::{Image as TypstImage, RasterFormat};
@@ -110,7 +111,7 @@ impl IGlyphProvider for FontGlyphProvider {
         // convert to typst's image format
         // todo: verify result
         let glyph_image = TypstImage::new(
-            raster.data.into(),
+            Bytes::new(raster.data.to_vec()),
             RasterFormat::Png.into(),
             // Axes::new(raster.width as u32, raster.height as u32),
             None,

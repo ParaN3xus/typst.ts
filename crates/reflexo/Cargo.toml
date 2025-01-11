@@ -34,6 +34,7 @@ serde_with.workspace = true
 rkyv = { workspace = true, optional = true }
 
 typst = { workspace = true, optional = true }
+typst-pdf = { workspace = true }
 reflexo-typst-shim = { workspace = true, optional = true }
 
 [dev-dependencies]

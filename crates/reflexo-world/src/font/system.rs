@@ -1,5 +1,4 @@
 use std::{
-    borrow::Cow,
     collections::HashMap,
     fs::File,
     path::{Path, PathBuf},
@@ -135,10 +134,7 @@ impl SystemFontSearcher {
 
         // Source3: add the fonts in memory.
         for font_data in opts.with_embedded_fonts {
-            self.add_memory_font(match font_data {
-                Cow::Borrowed(data) => Bytes::from_static(data),
-                Cow::Owned(data) => Bytes::from(data),
-            });
+            self.add_memory_font(Bytes::new(font_data));
         }
 
         Ok(())
