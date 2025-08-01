@@ -17,7 +17,7 @@ use typst::visualize::{ExchangeFormat, ImageFormat, ImageKind, RasterFormat, Vec
 use typst_svg::pdf_to_png;
 
 use crate::hash::typst_affinite_hash;
-use crate::{FromTypst, IntoTypst, TryFromTypst};
+use crate::{FromTypst, FromTypstWithScale, IntoTypst, TryFromTypst};
 
 pub trait ImageExt {
     fn data(&self) -> &Bytes;
@@ -174,6 +174,13 @@ impl FromTypst<Font> for FontItem {
 /// Collect image data from [`typst::visualize::Image`].
 impl FromTypst<typst::visualize::Image> for Image {
     fn from_typst(image: typst::visualize::Image) -> Self {
+        Self::from_typst_with_scale(image, 1.0)
+    }
+}
+
+impl FromTypstWithScale<typst::visualize::Image> for Image {
+    /// Create Image with custom scale factor for PDF rendering
+    fn from_typst_with_scale(image: typst::visualize::Image, scale_factor: f32) -> Self {
         let format = match image.format() {
             ImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Jpg)) => "jpeg",
             ImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Png)) => "png",
@@ -199,7 +206,12 @@ impl FromTypst<typst::visualize::Image> for Image {
             attrs
         };
 
-        let (hash, data) = encode_image(&image);
+        let (hash, data) = if matches!(image.format(), ImageFormat::Vector(VectorFormat::Pdf)) {
+            encode_image_with_scale(&image, scale_factor)
+        } else {
+            encode_image(&image)
+        };
+
         Image {
             data,
             format: format.into(),
@@ -212,8 +224,20 @@ impl FromTypst<typst::visualize::Image> for Image {
 
 #[comemo::memoize]
 fn encode_image(image: &typst::visualize::Image) -> (Fingerprint, Arc<[u8]>) {
-    // steal prehash from [`typst::image::Image`]
-    let hash = Fingerprint::from_u128(typst_affinite_hash(&image));
+    encode_image_with_scale(image, 1.0)
+}
+
+#[comemo::memoize]
+fn encode_image_with_scale_impl(
+    image: &typst::visualize::Image,
+    scale_bits: u32,
+) -> (Fingerprint, Arc<[u8]>) {
+    // Create a composite hash that includes both image content and scale factor
+    let scale_factor = f32::from_bits(scale_bits);
+    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+    std::hash::Hash::hash(&typst_affinite_hash(&image), &mut hasher);
+    std::hash::Hash::hash(&scale_bits, &mut hasher);
+    let hash = Fingerprint::from_u128(std::hash::Hasher::finish(&hasher) as u128);
 
     let data = match image.kind() {
         ImageKind::Raster(raster) => match raster.format() {
@@ -230,18 +254,20 @@ fn encode_image(image: &typst::visualize::Image) -> (Fingerprint, Arc<[u8]>) {
         },
         ImageKind::Svg(svg) => svg.data().as_slice().into(),
         ImageKind::Pdf(pdf) => {
-            // Copied from https://github.com/typst/typst/blob/59243dadbb2e9f5fc4fd55b0dbfaca6496caf761/crates/typst-svg/src/image.rs#L73
-            // To make sure the image isn't pixelated, we always scale up so the
-            // lowest dimension has at least 1000 pixels. However, we only scale
-            // up as much so that the largest dimension doesn't exceed 3000
-            // pixels.
+            // Adaptive PDF rendering based on scale factor
+            // Base resolution settings
             const MIN_RES: f32 = 1000.0;
             const MAX_RES: f32 = 3000.0;
 
             let base_width = pdf.width();
-            let w_scale = (MIN_RES / base_width).max(MAX_RES / base_width);
             let base_height = pdf.height();
-            let h_scale = (MIN_RES / base_height).min(MAX_RES / base_height);
+
+            // Apply scale factor to resolution calculation
+            let scaled_min_res = MIN_RES * scale_factor.max(0.1);
+            let scaled_max_res = MAX_RES * scale_factor.max(0.1);
+
+            let w_scale = (scaled_min_res / base_width).max(scaled_max_res / base_width);
+            let h_scale = (scaled_min_res / base_height).min(scaled_max_res / base_height);
             let total_scale = w_scale.min(h_scale);
             let width = (base_width * total_scale).ceil() as u32;
             let height = (base_height * total_scale).ceil() as u32;
@@ -251,4 +277,11 @@ fn encode_image(image: &typst::visualize::Image) -> (Fingerprint, Arc<[u8]>) {
     };
 
     (hash, data)
+}
+
+fn encode_image_with_scale(
+    image: &typst::visualize::Image,
+    scale_factor: f32,
+) -> (Fingerprint, Arc<[u8]>) {
+    encode_image_with_scale_impl(image, scale_factor.to_bits())
 }

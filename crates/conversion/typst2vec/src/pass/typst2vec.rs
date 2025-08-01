@@ -1,6 +1,6 @@
 use std::{
     borrow::Cow,
-    hash::Hash,
+    hash::{Hash, Hasher},
     ops::DerefMut,
     sync::{atomic::AtomicU64, Arc},
 };
@@ -38,7 +38,7 @@ use crate::{
     ir::{self, *},
     path2d::SvgPath2DBuilder,
     utils::{AbsExt, ToCssExt},
-    FromTypst, IntoTypst,
+    FromTypst, IntoTypst, IntoTypstWithScale,
 };
 
 use super::{SourceNodeKind, SourceRegion, Span2VecPass, TGlyph2VecPass};
@@ -120,6 +120,7 @@ pub struct Typst2VecPassImpl<const ENABLE_REF_CNT: bool = false> {
     fingerprint_builder: FingerprintBuilder,
 
     pub lifetime: u64,
+    pub scale: f32,
 }
 
 pub type Typst2VecPass = Typst2VecPassImpl</* ENABLE_REF_CNT */ false>;
@@ -132,6 +133,7 @@ impl<const ENABLE_REF_CNT: bool> Default for Typst2VecPassImpl<ENABLE_REF_CNT> {
 
         Self {
             lifetime: 0,
+            scale: 1.0,
             glyphs,
             spans,
             cache_items: Default::default(),
@@ -883,13 +885,31 @@ impl<const ENABLE_REF_CNT: bool> Typst2VecPassImpl<ENABLE_REF_CNT> {
     }
 
     pub fn image(&self, image: &TypstImage, size: Axes<TypstAbs>) -> Fingerprint {
+        #[derive(Debug, Clone, Copy, PartialEq)]
+        struct HashableF32(f32);
+
+        impl Hash for HashableF32 {
+            fn hash<H: Hasher>(&self, state: &mut H) {
+                self.0.to_bits().hash(state);
+            }
+        }
+
         #[derive(Hash)]
         struct ImageKey<'i> {
             image: &'i TypstImage,
             size: Axes<TypstAbs>,
+            scale: HashableF32,
         }
 
-        let cond = ImageKey { image, size };
+        let real_scale_factor = match image.kind() {
+            typst::visualize::ImageKind::Pdf(_) => self.scale,
+            _ => 1.0,
+        };
+        let cond = ImageKey {
+            image,
+            size,
+            scale: HashableF32(real_scale_factor),
+        };
 
         self.store_cached(&cond, || {
             if matches!(image.alt(), Some("!typst-embed-command")) {
@@ -902,7 +922,7 @@ impl<const ENABLE_REF_CNT: bool> Typst2VecPassImpl<ENABLE_REF_CNT> {
             }
 
             VecItem::Image(ImageItem {
-                image: Arc::new(image.clone().into_typst()),
+                image: Arc::new(image.clone().into_typst_with_scale(self.scale)),
                 size: size.into_typst(),
             })
         })
