@@ -32,6 +32,10 @@ impl IncrDocServer {
             .set_should_attach_debug_info(should_attach_debug_info);
     }
 
+    pub fn set_typst2vec_scale(&mut self, scale: f32) {
+        self.typst2vec.scale = scale;
+    }
+
     /// Pack the delta into a binary blob.
     pub fn pack_delta(&mut self, output: &TypstDocument) -> Vec<u8> {
         self.typst2vec.spans.reset();

@@ -274,21 +274,21 @@ typst-html = { git = "https://github.com/ParaN3xus/typst.git", branch = "nightly
 
 # fontdb = { path = "../fontdb" }
 
-typst-shim = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
-tinymist-derive = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
-tinymist-std = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
-tinymist-task = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
-tinymist-package = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
-tinymist-world = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
-tinymist-project = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# typst-shim = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# tinymist-derive = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# tinymist-std = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# tinymist-task = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# tinymist-package = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# tinymist-world = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
+# tinymist-project = { git = "https://github.com/ParaN3xus/tinymist.git", branch = "nightly" }
 
-# typst-shim = { path = "../tinymist/crates/typst-shim" }
-# tinymist-derive = { path = "../tinymist/crates/tinymist-derive" }
-# tinymist-std = { path = "../tinymist/crates/tinymist-std" }
-# tinymist-task = { path = "../tinymist/crates/tinymist-task" }
-# tinymist-package = { path = "../tinymist/crates/tinymist-package" }
-# tinymist-world = { path = "../tinymist/crates/tinymist-world" }
-# tinymist-project = { path = "../tinymist/crates/tinymist-project" }
+typst-shim = { path = "../tinymist/crates/typst-shim" }
+tinymist-derive = { path = "../tinymist/crates/tinymist-derive" }
+tinymist-std = { path = "../tinymist/crates/tinymist-std" }
+tinymist-task = { path = "../tinymist/crates/tinymist-task" }
+tinymist-package = { path = "../tinymist/crates/tinymist-package" }
+tinymist-world = { path = "../tinymist/crates/tinymist-world" }
+tinymist-project = { path = "../tinymist/crates/tinymist-project" }
 
 
 # [patch."https://github.com/Myriad-Dreamin/tinymist.git"]

@@ -1,9 +1,19 @@
+use typst::layout::{Abs, Axes};
+
 pub trait FromTypst<T>: Sized {
     fn from_typst(value: T) -> Self;
 }
 
+pub trait FromTypstWithScale<T>: Sized {
+    fn from_typst_with_scale(value: T, scale: f32, size: Axes<Abs>) -> Self;
+}
+
 pub trait IntoTypst<T>: Sized {
     fn into_typst(self) -> T;
+}
+
+pub trait IntoTypstWithScale<T>: Sized {
+    fn into_typst_with_scale(self, scale: f32, size: Axes<Abs>) -> T;
 }
 
 impl<T, U> IntoTypst<U> for T
@@ -12,6 +22,15 @@ where
 {
     fn into_typst(self) -> U {
         U::from_typst(self)
+    }
+}
+
+impl<T, U> IntoTypstWithScale<U> for T
+where
+    U: FromTypstWithScale<T>,
+{
+    fn into_typst_with_scale(self, scale: f32, size: Axes<Abs>) -> U {
+        U::from_typst_with_scale(self, scale, size)
     }
 }
 

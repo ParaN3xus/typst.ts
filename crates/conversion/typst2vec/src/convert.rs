@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use image::codecs::png::PngEncoder;
-use image::ImageEncoder;
+use image::codecs::{jpeg::JpegEncoder, png::PngEncoder};
+use image::{ExtendedColorType, ImageEncoder};
 pub use reflexo::vector::ir::*;
 
 use reflexo::hash::{item_hash128, Fingerprint};
@@ -13,11 +13,13 @@ use typst::layout::{
 };
 use typst::text::Font;
 use typst::utils::Scalar as TypstScalar;
-use typst::visualize::{ExchangeFormat, ImageFormat, ImageKind, RasterFormat, VectorFormat};
-use typst_svg::pdf_to_png;
+use typst::visualize::{
+    ExchangeFormat, ImageFormat as TypstImageFormat, ImageKind, RasterFormat, VectorFormat,
+};
+use typst_svg::pdf_to_hayro_pixmap;
 
 use crate::hash::typst_affinite_hash;
-use crate::{FromTypst, IntoTypst, TryFromTypst};
+use crate::{FromTypst, FromTypstWithScale, IntoTypst, TryFromTypst};
 
 pub trait ImageExt {
     fn data(&self) -> &Bytes;
@@ -174,14 +176,25 @@ impl FromTypst<Font> for FontItem {
 /// Collect image data from [`typst::visualize::Image`].
 impl FromTypst<typst::visualize::Image> for Image {
     fn from_typst(image: typst::visualize::Image) -> Self {
+        Self::from_typst_with_scale(image, 1.0, TypstAxes::default())
+    }
+}
+
+impl FromTypstWithScale<typst::visualize::Image> for Image {
+    /// Create Image with custom scale factor for PDF rendering
+    fn from_typst_with_scale(
+        image: typst::visualize::Image,
+        scale_factor: f32,
+        size: TypstAxes<TypstAbs>,
+    ) -> Self {
         let format = match image.format() {
-            ImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Jpg)) => "jpeg",
-            ImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Png)) => "png",
-            ImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Webp)) => "webp",
-            ImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Gif)) => "gif",
-            ImageFormat::Raster(RasterFormat::Pixel(..)) => "png",
-            ImageFormat::Vector(VectorFormat::Svg) => "svg+xml",
-            ImageFormat::Vector(VectorFormat::Pdf) => "png",
+            TypstImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Jpg)) => "jpeg",
+            TypstImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Png)) => "png",
+            TypstImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Webp)) => "webp",
+            TypstImageFormat::Raster(RasterFormat::Exchange(ExchangeFormat::Gif)) => "gif",
+            TypstImageFormat::Raster(RasterFormat::Pixel(..)) => "png",
+            TypstImageFormat::Vector(VectorFormat::Svg) => "svg+xml",
+            TypstImageFormat::Vector(VectorFormat::Pdf) => "jpeg",
         };
         let attrs = {
             let mut attrs = Vec::new();
@@ -199,7 +212,13 @@ impl FromTypst<typst::visualize::Image> for Image {
             attrs
         };
 
-        let (hash, data) = encode_image(&image);
+        let (hash, data) = if matches!(image.format(), TypstImageFormat::Vector(VectorFormat::Pdf))
+        {
+            encode_pdf(&image, scale_factor, size)
+        } else {
+            encode_image(&image)
+        };
+
         Image {
             data,
             format: format.into(),
@@ -229,26 +248,84 @@ fn encode_image(image: &typst::visualize::Image) -> (Fingerprint, Arc<[u8]>) {
             }
         },
         ImageKind::Svg(svg) => svg.data().as_slice().into(),
+        ImageKind::Pdf(_) => unreachable!(),
+    };
+    (hash, data)
+}
+
+#[comemo::memoize]
+fn encode_pdf_impl(
+    image: &typst::visualize::Image,
+    scale_bits: u32,
+    size: TypstAxes<TypstAbs>,
+) -> (Fingerprint, Arc<[u8]>) {
+    // Create a composite hash that includes both image content and scale factor
+    let scale_factor = f32::from_bits(scale_bits);
+    let target_width = size.x.to_pt() as f32;
+
+    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+    std::hash::Hash::hash(&typst_affinite_hash(&image), &mut hasher);
+    std::hash::Hash::hash(&scale_bits, &mut hasher);
+    std::hash::Hash::hash(&target_width.to_bits(), &mut hasher);
+    let hash = Fingerprint::from_u128(std::hash::Hasher::finish(&hasher) as u128);
+
+    let data = match image.kind() {
         ImageKind::Pdf(pdf) => {
-            // Copied from https://github.com/typst/typst/blob/59243dadbb2e9f5fc4fd55b0dbfaca6496caf761/crates/typst-svg/src/image.rs#L73
-            // To make sure the image isn't pixelated, we always scale up so the
-            // lowest dimension has at least 1000 pixels. However, we only scale
-            // up as much so that the largest dimension doesn't exceed 3000
-            // pixels.
-            const MIN_RES: f32 = 1000.0;
-            const MAX_RES: f32 = 3000.0;
+            const MIN_RES: f32 = 500.0;
 
             let base_width = pdf.width();
-            let w_scale = (MIN_RES / base_width).max(MAX_RES / base_width);
             let base_height = pdf.height();
-            let h_scale = (MIN_RES / base_height).min(MAX_RES / base_height);
-            let total_scale = w_scale.min(h_scale);
-            let width = (base_width * total_scale).ceil() as u32;
-            let height = (base_height * total_scale).ceil() as u32;
 
-            pdf_to_png(pdf, width, height).as_slice().into()
+            let total_scale = target_width * scale_factor / base_width;
+
+            let w_scale = (MIN_RES / base_width).max(total_scale);
+            let h_scale = (MIN_RES / base_height).max(total_scale);
+
+            let final_scale = w_scale.min(h_scale);
+
+            let width = (base_width * final_scale).ceil() as u32;
+            let height = (base_height * final_scale).ceil() as u32;
+
+            log::info!("!!!! final width: {width}");
+
+            let pixmap = pdf_to_hayro_pixmap(pdf, width, height);
+
+            log::info!("!!!! got pix");
+
+            let rgba_data = pixmap.data_as_u8_slice();
+            let mut rgb_data = Vec::with_capacity(rgba_data.len() * 3 / 4);
+
+            for chunk in rgba_data.chunks_exact(4) {
+                rgb_data.push(chunk[0]); // R
+                rgb_data.push(chunk[1]); // G
+                rgb_data.push(chunk[2]); // B
+                                         // no A
+            }
+
+            let mut buf = vec![];
+            let encoder = JpegEncoder::new_with_quality(&mut buf, 90);
+            encoder
+                .write_image(
+                    &rgb_data,
+                    pixmap.width() as u32,
+                    pixmap.height() as u32,
+                    ExtendedColorType::Rgb8,
+                )
+                .unwrap();
+            log::info!("!!!! got jpg");
+
+            buf.as_slice().into()
         }
+        _ => unreachable!(),
     };
 
     (hash, data)
+}
+
+fn encode_pdf(
+    image: &typst::visualize::Image,
+    scale_factor: f32,
+    size: TypstAxes<TypstAbs>,
+) -> (Fingerprint, Arc<[u8]>) {
+    encode_pdf_impl(image, scale_factor.to_bits(), size)
 }
