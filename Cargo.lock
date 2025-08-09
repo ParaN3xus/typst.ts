@@ -4569,7 +4569,7 @@ dependencies = [
 [[package]]
 name = "tinymist-derive"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "quote",
  "syn 2.0.104",
@@ -4578,7 +4578,7 @@ dependencies = [
 [[package]]
 name = "tinymist-l10n"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "anyhow",
  "clap",
@@ -4592,7 +4592,7 @@ dependencies = [
 [[package]]
 name = "tinymist-package"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "base64 0.22.1",
  "comemo",
@@ -4618,7 +4618,7 @@ dependencies = [
 [[package]]
 name = "tinymist-project"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "anyhow",
  "clap",
@@ -4646,7 +4646,7 @@ dependencies = [
 [[package]]
 name = "tinymist-std"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -4684,7 +4684,7 @@ dependencies = [
 [[package]]
 name = "tinymist-task"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "anyhow",
  "clap",
@@ -4718,7 +4718,7 @@ dependencies = [
 [[package]]
 name = "tinymist-vfs"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "comemo",
  "ecow",
@@ -4737,7 +4737,7 @@ dependencies = [
 [[package]]
 name = "tinymist-world"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "anyhow",
  "chrono",
@@ -5304,7 +5304,7 @@ dependencies = [
 [[package]]
 name = "typst-shim"
 version = "0.13.17"
-source = "git+https://github.com/ParaN3xus/tinymist.git?rev=7b911ac4b405859d1b57ace2ad8c91dd16909ee9#7b911ac4b405859d1b57ace2ad8c91dd16909ee9"
+source = "git+https://github.com/ParaN3xus/tinymist.git?rev=c8673c258f73a51e6fc9a9d264cd379f514e0743#c8673c258f73a51e6fc9a9d264cd379f514e0743"
 dependencies = [
  "cfg-if",
  "comemo",
