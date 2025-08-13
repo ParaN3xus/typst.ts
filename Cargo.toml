@@ -41,6 +41,7 @@ members = [
     "tests/common",
     "tests/heap-profile",
     "tests/incremental",
+    "tests/incr",
     "tests/integration",
     "tests/std",
     "tests/docs",

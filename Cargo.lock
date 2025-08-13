@@ -5144,6 +5144,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "typst-ts-incr-test"
+version = "0.6.1-rc2"
+dependencies = [
+ "clap",
+ "reflexo-typst",
+ "reflexo-vec2svg",
+ "tinymist-project",
+ "tinymist-world",
+ "typst",
+]
+
+[[package]]
 name = "typst-ts-incremental-fuzzer"
 version = "0.6.1-rc2"
 dependencies = [
